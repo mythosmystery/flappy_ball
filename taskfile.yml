@@ -1,0 +1,32 @@
+version: '3'
+
+tasks:
+  build:
+    desc: "Build the project using CMake"
+    dir: "./build"
+    cmds:
+      - cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
+      - make
+
+  clean:
+    desc: "Clean the build directory"
+    cmds:
+      - rm -rf build
+
+  run:
+    desc: "Run the project"
+    cmds:
+      - ./build/flappy_ball
+    depends: [build]
+
+  watch:
+    desc: "Watch the code and re-run the build process on change"
+    cmds:
+      - find src -type f | entr -r task all
+
+  all:
+    desc: "Clean, build, and run the project"
+    cmds:
+      - task: clean
+      - task: build
+      - task: run
